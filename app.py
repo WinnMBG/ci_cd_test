@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-   return "<p>Hello, World!</p>"
+   ip = request.host.split(':')[0] 
+   return f"<p><h2>Hello, World!</h2><h3>L'adresse IP est la suivante : {ip}</p>"
 
 if __name__== "__main__":
 
