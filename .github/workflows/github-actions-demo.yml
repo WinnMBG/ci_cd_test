@@ -1,15 +1,6 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Show Event Information
-        run: |
-          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-          echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
   Launch-Python-File:
     runs-on: ubuntu-latest
     steps:
@@ -26,3 +17,21 @@ jobs:
 
       - name: Run tests
         run: pytest test.py
+  
+  Docker-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/flasky_ci_cd:latest .
+      
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/flasky_ci_cd:latest
